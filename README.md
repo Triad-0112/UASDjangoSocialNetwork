@@ -5,6 +5,9 @@ UASDjangoSocialNetwork adalah proyek aplikasi jejaring sosial yang dibangun deng
 
 ## Sumber Referensi
 - [Gatherly - Pdshetley](https://github.com/pdshetley/Gatherly)
+- Library Channels
+- Library DjangoRestFramework
+- Need Redis
 
 ## Daftar Pekerjaan
 
