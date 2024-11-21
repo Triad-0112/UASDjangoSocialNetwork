@@ -18,8 +18,16 @@ class FindFriendsListView(ListView):
     def get_queryset(self):
         current_user_friends = self.request.user.friends.values('id')
         sent_request = list(Friend.objects.filter(user=self.request.user).values_list('friend_id', flat=True))
-        users = User.objects.exclude(id__in=current_user_friends).exclude(id__in=sent_request).exclude(id=self.request.user.id)
-        return users
+        friends = list(Friend.objects.filter(friend=self.request.user, status= 'friend').values_list('user_id', flat=True))
+        users = User.objects.exclude(id__in=current_user_friends).exclude(id__in=sent_request).exclude(id=self.request.user.id).exclude(id__in=friends)
+        data = []
+        for user in users:
+            if Friend.objects.filter(user_id=user.id, friend_id=self.request.user.id):
+                user.needAccept = True
+            else:
+                user.needAccept = False
+            data.append(user)
+        return data
 
 
 def send_request(request, username=None):

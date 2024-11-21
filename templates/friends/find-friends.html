@@ -34,7 +34,12 @@
                                                                 <div class="pepl-info">
                                                                     <h4><a href="#" title="">{{ user.username }}</a></h4>
                                                                     <span>Software Engineer</span>
-                                                                    <a href="#" title="" data-url="{% url 'friends:send-request' user.username %}" class="add-butn add-friend" data-ripple="" data-friend="{{ user.username }}">Add Friend</a>
+                                                                    {% if user.needAccept %}
+                                                                        <a href="#" title="" data-url="{% url 'friends:accept-request' user.username %}" class="add-butn add-friend" data-ripple="" data-friend="{{ user.username }}">Accept Request</a>
+                                                                    {% else %}
+                                                                        <a href="#" title="" data-url="{% url 'friends:send-request' user.username %}" class="add-butn add-friend" data-ripple="" data-friend="{{ user.username }}">Add Friend</a>
+                                                                    {% endif %}
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </li>

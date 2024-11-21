@@ -179,18 +179,18 @@
                                         <h4 class="widget-title">Friends</h4>
                                         <div id="searchDir"></div>
                                         <ul id="people-list" class="friendz-list">
-                                            {#                                            {% for friend in friends %}#}
-                                            {#                                                <li>#}
-                                            {#                                                    <figure>#}
-                                            {#                                                        <img src="images/resources/friend-avatar.jpg" alt="">#}
-                                            {#                                                        <span class="status f-online"></span>#}
-                                            {#                                                    </figure>#}
-                                            {#                                                    <div class="friendz-meta">#}
-                                            {#                                                        <a href="time-line.html">{{ friend.user.username }}</a>#}
-                                            {#                                                        <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="07706e6973627574686b63627547606a666e6b2964686a">[email&#160;protected]</a></i>#}
-                                            {#                                                    </div>#}
-                                            {#                                                </li>#}
-                                            {#                                            {% endfor %}#}
+                                            {% for friend in friends %}
+                                                <li>
+                                                    <figure>
+                                                        <img src="images/resources/friend-avatar.jpg" alt="">
+                                                        <span class="status f-online"></span>
+                                                    </figure>
+                                                    <div class="friendz-meta">
+                                                        <a href="time-line.html">{{ friend.user.username }}</a>
+                                                        <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="07706e6973627574686b63627547606a666e6b2964686a">[email&#160;protected]</a></i>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
                                         </ul>
                                         <div class="chat-box">
                                             <div class="chat-head">
