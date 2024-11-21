@@ -18,24 +18,24 @@
                                             <img src="{{ request.user.profile.profile_image.url }}" alt="">
                                         </figure>
                                         <div class="newpst-input">
-                                            <form method="post" action="{% url 'newsfeed:post-create' %}">
+                                            <form method="post" action="{% url 'newsfeed:post-create' %}" enctype="multipart/form-data">
                                                 {% csrf_token %}
                                                 <textarea rows="2" name="body" placeholder="Write something"></textarea>
                                                 <div class="attachments">
                                                     <ul>
-                                                        <li>
+                                                        {% comment %} <li>
                                                             <i class="fa fa-music"></i>
                                                             <label class="fileContainer">
                                                                 <input type="file">
                                                             </label>
-                                                        </li>
+                                                        </li> {% endcomment %}
                                                         <li>
                                                             <i class="fa fa-image"></i>
                                                             <label class="fileContainer">
-                                                                <input type="file">
+                                                                <input type="file" name="image" accept="image/png, image/gif, image/jpeg" >
                                                             </label>
                                                         </li>
-                                                        <li>
+                                                        {% comment %} <li>
                                                             <i class="fa fa-video-camera"></i>
                                                             <label class="fileContainer">
                                                                 <input type="file">
@@ -46,7 +46,7 @@
                                                             <label class="fileContainer">
                                                                 <input type="file">
                                                             </label>
-                                                        </li>
+                                                        </li> {% endcomment %}
                                                         <li>
                                                             <button type="submit">Post</button>
                                                         </li>
@@ -131,6 +131,10 @@
                                                         </div>
                                                         <div class="description">
                                                             <p>{{ post.body }}</p>
+                                                            {% if post.image.url != '/media/posts/img/Blank.jpg' %}
+                                                                {% comment %} <img src="media/posts/img/IMG_0797.PNG" style="width: auto"> {% endcomment %}
+                                                                <img src="{{ post.image.url }}" style="width: auto; min-width: 100%;">
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 </div>

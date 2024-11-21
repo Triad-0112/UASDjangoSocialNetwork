@@ -7,6 +7,7 @@ from django.utils.timezone import now
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     body = models.TextField()
+    image = models.ImageField(upload_to='posts/img/', default='posts/img/Blank.jpg')
     created_at = models.DateTimeField(default=now)
 
 
