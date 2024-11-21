@@ -48,5 +48,8 @@ class ProfileEditView(UpdateView):
         profile.country = request.POST.get('country')
         profile.city = request.POST.get('city')
         profile.phone = request.POST.get('phone')
+        if bool(request.FILES.get('profile_image', False)) == True:
+            profile.profile_image = request.FILES.get('profile_image')
+        
         profile.save()
         return redirect(reverse_lazy('profile:edit-profile'))
