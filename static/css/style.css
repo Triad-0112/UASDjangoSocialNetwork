@@ -1788,10 +1788,19 @@ for some reason nth-child(1) is always busy and elements starting from 2 */
 }
 
 .comet-avatar {
-    display: table-cell;
-    max-width: 7.6%;
-    vertical-align: top;
-    width: 7.6%;
+    display: inline-block;
+    width: 40px;             
+    height: 40px;             
+    overflow: hidden;     
+    border-radius: 50%;      
+    position: relative;
+}
+
+.comet-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    
+    object-position: center;
 }
 
 .we-comment {
@@ -2841,6 +2850,23 @@ li.google {
     height: 100vh;
     position: relative;
     width: 100%;
+}
+
+.image-container {
+    width: 100%; 
+    height: 0;
+    padding-bottom: 100%;
+    position: relative;
+    overflow: hidden; 
+}
+
+.image-container img {
+    position: absolute; 
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover;
 }
 
 .bg-image {

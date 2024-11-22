@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
     <section>
         <div class="gap gray-bg">
             <div class="container-fluid">
@@ -45,15 +44,15 @@
                                         <form method="post" action="" enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <div class="form-group half">
-                                                <input type="text" id="input" name="first_name" required="required" value="{{ request.user.first_name }}"/>
+                                                <input type="text" id="input" name="first_name" value="{{ request.user.first_name }}"/>
                                                 <label class="control-label" for="input">First Name</label><i class="mtrl-select"></i>
                                             </div>
                                             <div class="form-group half">
-                                                <input type="text" name="last_name" required="required" value="{{ request.user.last_name }}"/>
+                                                <input type="text" name="last_name" value="{{ request.user.last_name }}"/>
                                                 <label class="control-label" for="input">Last Name</label><i class="mtrl-select"></i>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" name="phone" required="required" value="{{ profile.phone }}"/>
+                                                <input type="text" name="phone" value="{{ profile.phone }}"/>
                                                 <label class="control-label" for="input">Phone No.</label><i class="mtrl-select"></i>
                                             </div>
                                             <div class="form-radio">
@@ -69,28 +68,24 @@
                                                 </div>
                                             </div>
                                             <div class="form-group half">
-                                                <input type="text" name="country" required="required" value="{{ profile.country }}"/>
+                                                <input type="text" name="country" value="{{ profile.country }}"/>
                                                 <label class="control-label" for="input">Country</label><i class="mtrl-select"></i>
                                             </div>
                                             <div class="form-group half">
-                                                <input type="text" name="city" required="required" value="{{ profile.city }}"/>
+                                                <input type="text" name="city" value="{{ profile.city }}"/>
                                                 <label class="control-label" for="input">City</label><i class="mtrl-select"></i>
                                             </div>
                                             <div class="form-group">
-                                                <textarea rows="4" id="textarea" required="required" name="about">{{ request.user.about }}</textarea>
+                                                <textarea rows="4" id="textarea" name="about">{{ request.user.about }}</textarea>
                                                 <label class="control-label" for="textarea">About Me</label><i class="mtrl-select"></i>
                                             </div>
                                             <div class="form-group half">
-                                                <img
-                                                    src="{{ user.profile.profile_image.url }}"
-                                                    id="profile_image_show"
-                                                    class="img-fluid rounded-top mt-4"
-                                                    alt="Profile Image"
-                                                    style="height: 150px"
-                                                />
-                                                
-                                                <input type="file" id="profile_image" class="form-control" name="profile_image" accept="image/png, image/gif, image/jpeg"/>
-                                                <label class="control-label" for="input">Profile Image</label><i class="mtrl-select"></i>
+                                                <label class="control-label" for="profile_image"></label>
+                                                <input type="file" id="profile_image" class="form-control" name="profile_image" accept="image/png, image/gif, image/jpeg" />
+                                                <img id="image-preview" src="" style="max-width: 100%; display: none;" />
+                                                <div id="crop-container" style="display: none;">
+                                                    <button id="crop-button">Crop & Save</button>
+                                                </div>
                                             </div>
                                             <div class="submit-btns">
                                                 <button type="button" class="mtr-btn"><span>Cancel</span></button>
@@ -112,21 +107,63 @@
     </section>
 {% endblock %}
 {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <script>
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+document.getElementById("profile_image").addEventListener("change", function (event) {
+    const imagePreview = document.getElementById("image-preview");
+    const cropContainer = document.getElementById("crop-container");
+    const file = event.target.files[0];
     
-            reader.onload = function (e) {
-                $('#profile_image_show').attr('src', e.target.result);
-            }
-    
-            reader.readAsDataURL(input.files[0]);
-        }
+    if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = "block";
+            cropContainer.style.display = "block";
+
+            const cropper = new Cropper(imagePreview, {
+                aspectRatio: 1, 
+                viewMode: 2, 
+            });
+
+            document.getElementById("crop-button").addEventListener("click", function () {
+                const canvas = cropper.getCroppedCanvas();
+                
+                canvas.toBlob(function (blob) {
+                    const formData = new FormData();
+                    const firstName = document.querySelector('input[name="first_name"]').value;
+                    const lastName = document.querySelector('input[name="last_name"]').value;
+                    const date = new Date().toISOString().split('T')[0]; 
+
+                    const fileName = `${date}-${firstName.toLowerCase()}-${lastName.toLowerCase()}.jpg`;
+                    
+                    formData.append("profile_image", blob, fileName);
+
+                    fetch("/timeline/edit-profile", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Image cropped and saved successfully!");
+                            location.reload();
+                        } else {
+                            alert("Failed to save image.");
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+                }, "image/jpeg");
+            });
+        };
+        
+        reader.readAsDataURL(file);
     }
-    
-    $("#profile_image").change(function(){
-        readURL(this);
-    });
+});
+
 </script>
 {% endblock %}
