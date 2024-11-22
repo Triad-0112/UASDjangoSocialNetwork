@@ -42,18 +42,30 @@
                         </p>
                         <form method="post" action="">
                             {% csrf_token %}
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.non_field_errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                             <div class="form-group">
                                 <input type="email" id="input" name="email" required="required"/>
                                 <label class="control-label" for="input">Email</label><i class="mtrl-select"></i>
+                                <div class="error">
+                                    {{ form.email.errors }}
+                                </div>
                             </div>
                             <div class="form-group">
                                 <input type="password" name="password" required="required"/>
                                 <label class="control-label" for="input">Password</label><i class="mtrl-select"></i>
+                                <div class="error">
+                                    {{ form.password.errors }}
+                                </div>
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" checked="checked"/><i class="check-box"></i>Always Remember
-                                    Me.
+                                    <input type="checkbox" checked="checked"/><i class="check-box"></i>Always Remember Me.
                                 </label>
                             </div>
                             <a href="#" title="" class="forgot-pwd">Forgot Password?</a>

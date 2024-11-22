@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm, UsernameField
+from django.core.exceptions import ObjectDoesNotExist
 from .models import User
 
 class UserRegistrationForm(UserCreationForm):
@@ -52,19 +53,16 @@ class UserLoginForm(forms.Form):
     def clean(self, *args, **kwargs):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
-
         if email and password:
             self.user = authenticate(email=email, password=password)
-
             if self.user is None:
-                raise forms.ValidationError("Usermu belum terdaftar")
-            if not self.user.check_password(password):
-                raise forms.ValidationError("Salah passwordmu")
+                if User.objects.filter(email=email).exists():
+                    raise forms.ValidationError("Salah passwordmu")
+                else:
+                    raise forms.ValidationError("Usermu belum terdaftar")
             if not self.user.is_active:
                 raise forms.ValidationError("Kowe belum aktif")
-
-        # return self.cleaned_data
-        return super(UserLoginForm, self).clean(*args, **kwargs)
+        return super().clean(*args, **kwargs)
 
     def get_user(self):
         return self.user
