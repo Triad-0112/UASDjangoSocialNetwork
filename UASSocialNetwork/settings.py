@@ -158,15 +158,15 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Gatherly",
-    "site_header": "Gatherly",
-    "site_brand": "Gatherly Admin",
+    "site_title": "NgopiHub",
+    "site_header": "NgopiHub",
+    "site_brand": "NgopiHub Admin",
     "site_icon": "static/images/logo.png",
     # Add your own branding here
     "site_logo": None,
-    "welcome_sign": "Welcome to the Gatherly",
+    "welcome_sign": "Welcome to the NgopiHub",
     # Copyright on the footer
-    "copyright": "Gatherly",
+    "copyright": "NgopiHub",
     "user_avatar": None,
     ############
     # Top Menu #
@@ -174,7 +174,7 @@ JAZZMIN_SETTINGS = {
     # Links to put along the top menu
     "topmenu_links": [
         # Url that gets reversed (Permissions can be added)
-        {"name": "Gatherly", "url": "home", "permissions": ["auth.view_user"]},
+        {"name": "NgopiHub", "url": "home", "permissions": ["auth.view_user"]},
         # model admin to link to (Permissions checked against model)
         {"model": "auth.User"},
     ],
