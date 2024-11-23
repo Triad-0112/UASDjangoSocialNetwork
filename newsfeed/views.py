@@ -8,11 +8,14 @@ from channels.layers import get_channel_layer # type: ignore
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
 
 from friends.models import CustomNotification
 from friends.serializers import NotificationSerializer
 from .forms import PostCreateForm
 from .models import *
+
 
 
 class PostCreateView(CreateView):
@@ -59,3 +62,23 @@ def create_comment(request, post_id=None):
         return redirect(reverse_lazy('core:home'))
     else:
         return redirect(reverse_lazy('core:home'))
+
+
+def like_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user in post.likes.all():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+        post.dislikes.remove(request.user)  
+    print(f"Post {post_id} likes: {post.likes_count}, dislikes: {post.dislikes_count}")
+    return JsonResponse({'likes_count': post.likes_count, 'dislikes_count': post.dislikes_count})
+
+def dislike_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user in post.dislikes.all():
+        post.dislikes.remove(request.user)
+    else:
+        post.dislikes.add(request.user)
+        post.likes.remove(request.user) 
+    return JsonResponse({'likes_count': post.likes_count, 'dislikes_count': post.dislikes_count})
